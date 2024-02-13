@@ -172,7 +172,6 @@ int obstacle_status =B100000;
 }
 
 void auto_avoidance(){
-
   ++numcycles;
   if(numcycles>=LPT){ //Watch if something is around every LPT loops while moving forward 
      stop_Stop();
@@ -233,8 +232,6 @@ void auto_avoidance(){
          
   }
   
-  //else  Serial.println(numcycles);
-  
   distance = watch(); // use the watch() function to see if anything is ahead (when the robot is just moving forward and not looking around it will test the distance in front)
   if (distance<distancelimit){ // The robot will just stop if it is completely sure there's an obstacle ahead (must test 25 times) (needed to ignore ultrasonic sensor's false signals)
  Serial.println("final go back");
@@ -251,4 +248,3 @@ void auto_avoidance(){
     thereis=0;
   }
 }
- 
