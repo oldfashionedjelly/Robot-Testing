@@ -1,0 +1,11 @@
+Battery power: 8.25 
+
+Forward:
+HIGH-325 ms
+MID-525 ms
+LOW-833 ms
+
+Turn:
+HIGH-
+MID-
+LOW-

@@ -3,7 +3,7 @@
 #define IN2 8
 #define ENA 5  
 
-#define FRONT 90
+#define FRONT 96 //if left: increase; if right: decrease
 int SHARP_RIGHT=FRONT+35;
 int SHARP_LEFT=FRONT-35;
 int  RIGHT=FRONT+18;
@@ -17,9 +17,9 @@ int SENSOR_FAR_RIGHT=SENSOR_FRONT-60;
 
 #define DELAY_TIME    1000   
 
-#define SPEED         170
-#define FAST_SPEED    230 
-#define MID_SPEED     200
+#define LOW_SPEED     140
+#define FAST_SPEED    240 
+#define MID_SPEED     190
 #define SERVO_STEER   9  
 #define SERVO_SENSOR  10  
 
@@ -34,17 +34,23 @@ const int distancelimit = 30;  //cm
 const int sidedistancelimit = 30; 
 int distance;
 
+int period = 2000;
 
-void back(int speed) {
+
+void back(int speed, int period) {
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2,LOW);
     analogWrite(ENA,speed);
+    delay(period);
+    stop();
 }
  
-void forward(int speed)  {
+void forward(int speed, int period)  {
     digitalWrite(IN1, LOW);
     digitalWrite(IN2,HIGH);
     analogWrite(ENA,speed);
+    delay(period);
+    stop();
 }
  
 void turn(int angle) {
@@ -68,11 +74,13 @@ void setup() {
     head_steer.attach(SERVO_STEER);
     head.attach(SERVO_SENSOR); 
     head.write(90);
+
+    Serial.begin(9600);
+
     turn(FRONT);
     stop();
     delay(2000);
 
-    Serial.begin(9600);
 }
 
  
@@ -90,60 +98,4 @@ int watch() {
   echo_distance=pulseIn(Echo_PIN,HIGH);
   echo_distance=echo_distance*0.01657; //cm
   return round(echo_distance);
-}
-
-String watchsurrounding() {
-    int obstacle_status =B100000;
-    centerscanval = watch();
-    if(centerscanval<distancelimit){
-        stop();
-        obstacle_status = obstacle_status | B100;
-    }
-
-    head.write(SENSOR_LEFT);
-    delay(100);
-    ldiagonalscanval = watch();
-    if(ldiagonalscanval<distancelimit){
-        stop();
-        obstacle_status = obstacle_status | B1000;
-    }
-
-    head.write(SENSOR_FAR_LEFT); 
-    delay(300);
-    leftscanval = watch();
-    if(leftscanval<sidedistancelimit){
-        stop();
-        obstacle_status = obstacle_status | B10000;
-    }
-
-    head.write(SENSOR_FRONT); 
-    delay(100);
-    centerscanval = watch();
-    if(centerscanval<distancelimit){
-        stop();
-        obstacle_status = obstacle_status | B100;
-    }
-
-    head.write(SENSOR_RIGHT);
-    delay(100);
-    rdiagonalscanval = watch();
-    if(rdiagonalscanval<distancelimit){
-        stop();
-        obstacle_status = obstacle_status | B10;
-    }
-  
-    head.write(SENSOR_FAR_RIGHT);
-    delay(100);
-    rightscanval = watch();
-    if(rightscanval<sidedistancelimit){
-        stop();
-        obstacle_status = obstacle_status | 1;
-    }
-
-    head.write(SENSOR_FRONT);
-    delay(300);
-    String obstacle_str= String(obstacle_status,BIN);
-    obstacle_str= obstacle_str.substring(1,6);
-  
-    return obstacle_str; 
 }
