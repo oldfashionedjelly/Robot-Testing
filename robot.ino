@@ -22,7 +22,9 @@ int  LEFT=FRONT-45;
 #define TEMP_PERIOD   380
 #define TEMP_TURN_PERIOD 680
 
-#define SERVO_STEER   9  
+#define SERVO_STEER   9
+
+// kedaar wuz here
 
 PWMServo head_steer;
 
