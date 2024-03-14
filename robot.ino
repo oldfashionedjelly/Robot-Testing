@@ -3,7 +3,7 @@
 #define IN2 8
 #define ENA 5  
 
-#define FRONT 96 //if left: increase; if right: decrease
+#define FRONT 94 //if left: increase; if right: decrease
 int  RIGHT=FRONT+45;
 int  LEFT=FRONT-45;
 
@@ -18,13 +18,12 @@ int  LEFT=FRONT-45;
 #define LOW_PERIOD    833
 #define MID_PERIOD    525
 #define FAST_PERIOD   325
-#define TURN_PERIOD   1400
 #define TEMP_PERIOD   380
-#define TEMP_TURN_PERIOD 680
 
-#define SERVO_STEER   9
+#define TURN_PERIOD   1400
+#define TEMP_TURN_PERIOD 730
 
-// kedaar wuz here
+#define SERVO_STEER   9  
 
 PWMServo head_steer;
 
@@ -48,32 +47,67 @@ void turn(int angle) {
   head_steer.write(angle);
 }
 
-void right(int angle, int period, int speed) {
+void right(int speed, int period) {
     forward(speed, period*0.3);
-    turn(angle);
+    delay(2000);
+    turn(RIGHT);
     delay(2000);
     forward(speed, period);
+    delay(2000);
     turn(FRONT-10);
     delay(2000);
-    back(speed, period*0.25);
+    back(speed, period*0.15);
+    turn(FRONT);
 }
 
-void backRight(int angle, int period, int speed) {
-     forward(speed,period*0.25);
+void backRight(int speed, int period) {
+     forward(speed,period*0.15);
      delay(2000);
-     turn(angle);
+     turn(RIGHT);
+     delay(2000);
      back(speed, period);
      delay(2000);
      turn(FRONT-10);
+     delay(2000);
      back(speed, period*0.3);
+     turn(FRONT);
 }
 
-void left() {
-  
+void left(int speed, int period) {
+     back(speed, period*0.25);
+     delay(2000);
+     turn(LEFT);
+     delay(2000);
+     forward(speed, period-60);
+     delay(2000);
+     turn(RIGHT);
+     delay(2000);
+     back(speed, period*0.35);
+     delay(2000);
+     turn(FRONT-10);
+     delay(2000);
+     back(speed, period*0.2);
+     turn(FRONT);
 }
 
-void backLeft() {
-  
+void backLeft(int speed, int period) {
+  forward(speed, period*0.2);
+  delay(2000);
+  turn(RIGHT);
+  delay(2000);
+  forward(speed, period*0.5);
+  delay(2000);
+  turn(LEFT);
+  delay(2000);
+  back(speed, period-110);
+  delay(2000);
+  turn(RIGHT);
+  delay(2000);
+  forward(speed, period*0.6);
+  delay(2000);
+  turn(FRONT);
+  delay(2000);
+  back(speed, period*0.25);
 }
  
 void stop() {
@@ -94,7 +128,7 @@ void setup() {
     stop();
     delay(2000);
 
-    right(RIGHT, TEMP_TURN_PERIOD, TEMP_SPEED);
+
 }
 
  
